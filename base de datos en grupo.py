@@ -21,8 +21,14 @@ stock INTEGER
 """)   
 conexion.commit()
 
+def limpiar_entry():
+    entrada1.delete(0,tk.END)
+    entrada2.delete(0,tk.END)
+    entrada3.delete(0,tk.END)
+    entrada4.delete(0,tk.END)
 
 def ver_lista():
+    
     
     lista.delete(0, tk.END)
     cursor.execute("SELECT * FROM productos")
@@ -44,7 +50,8 @@ def agragar_data():
                 
     )
     conexion.commit()   
-    ver_lista() 
+    ver_lista()
+    limpiar_entry()
 
 def md_nombre_producto():
     
@@ -53,6 +60,7 @@ def md_nombre_producto():
     cursor.execute("UPDATE productos SET nombre_producto = ? WHERE id = ?", (t2,t1))
     conexion.commit()
     ver_lista()
+    limpiar_entry()
 
 def md_presio_producto():
     
@@ -61,6 +69,7 @@ def md_presio_producto():
     cursor.execute("UPDATE productos SET presio = ? WHERE id = ?", (t2,t1))
     conexion.commit()
     ver_lista()
+    limpiar_entry()
     
 def md_stock_producto():
     t1=entrada1.get()
@@ -68,12 +77,14 @@ def md_stock_producto():
     cursor.execute("UPDATE productos SET stock = ? WHERE id = ?", (t2,t1))
     conexion.commit()
     ver_lista()
+    limpiar_entry()
     
 def eliminar():
     t1=entrada1.get()
     cursor.execute("DELETE FROM productos WHERE id = ?",(t1,))
     conexion.commit()
     ver_lista()
+    limpiar_entry()
 
 ventana = tk.Tk()
 ventana.title("Prueba Multiprocessing")
