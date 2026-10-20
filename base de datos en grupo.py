@@ -1,15 +1,17 @@
+#pautas: Productos(supermercado). Un campo para ingresar nombre de producto, un campo para cargar precios, un campo para cargar stock. Un boton agregar producto. una tabla de productos registrados. Un boton para eliminar productos.
+# Tabla productos con id, nom, precio, stock. Las funciones asociadas a los botones
 import sqlite3
 
 import tkinter as tk
 
 
 
-conexion=sqlite3.connect("/home/programador10/Desktop/archivis/base de datos.db")
+conexion=sqlite3.connect("base de datos.db")
 
 cursor=conexion.cursor()
 cursor.execute(""" 
          
-CREATE TABLE IF NOT EXISTS usuario (
+CREATE TABLE IF NOT EXISTS productos (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
 nombre_producto TEXT,
 presio INTEGER,
@@ -23,10 +25,10 @@ conexion.commit()
 def ver_lista():
     
     lista.delete(0, tk.END)
-    cursor.execute("SELECT * FROM usuario")
+    cursor.execute("SELECT * FROM productos")
 
 
-    cursor.execute("SELECT * FROM usuario")
+    cursor.execute("SELECT * FROM productos")
     for alumno in cursor.fetchall():
         lista.insert(tk.END, alumno)
         print("222")
@@ -38,7 +40,7 @@ def agragar_data():
 
     cursor.execute(
                 
-    "INSERT INTO usuario (nombre_producto,presio,stock) VALUES (?,?,?)",(t1,t2,t3)
+    "INSERT INTO productos (nombre_producto,presio,stock) VALUES (?,?,?)",(t1,t2,t3)
                 
     )
     conexion.commit()   
@@ -48,7 +50,7 @@ def md_nombre_producto():
     
     t1=entrada1.get()
     t2=entrada2.get()  
-    cursor.execute("UPDATE usuario SET nombre_producto = ? WHERE id = ?", (t2,t1))
+    cursor.execute("UPDATE productos SET nombre_producto = ? WHERE id = ?", (t2,t1))
     conexion.commit()
     ver_lista()
 
@@ -56,20 +58,22 @@ def md_presio_producto():
     
     t1=entrada1.get()
     t2=entrada2.get()  
-    cursor.execute("UPDATE usuario SET nombre_producto = ? WHERE id = ?", (t2,t1))
+    cursor.execute("UPDATE productos SET presio = ? WHERE id = ?", (t2,t1))
     conexion.commit()
     ver_lista()
     
 def md_stock_producto():
-    
     t1=entrada1.get()
     t2=entrada2.get()  
-    cursor.execute("UPDATE usuario SET nombre_producto = ? WHERE id = ?", (t2,t1))
+    cursor.execute("UPDATE productos SET stock = ? WHERE id = ?", (t2,t1))
     conexion.commit()
     ver_lista()
     
-
-
+def eliminar():
+    t1=entrada1.get()
+    cursor.execute("DELETE FROM productos WHERE id = ?",(t1,))
+    conexion.commit()
+    ver_lista()
 
 ventana = tk.Tk()
 ventana.title("Prueba Multiprocessing")
@@ -97,7 +101,7 @@ tk.Button(ventana,text="agregar producto",command=agragar_data).pack()
 tk.Button(ventana,text="modificar nombre de producto",command=md_nombre_producto).pack()
 tk.Button(ventana,text="modificar presio del producto",command=md_presio_producto).pack()
 tk.Button(ventana,text="modificar stock del producto",command=md_stock_producto).pack()
-
+tk.Button(ventana,text="eliminar producto",command=eliminar).pack()
 
 
 lista=tk.Listbox(ventana)
